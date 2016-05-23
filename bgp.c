@@ -78,13 +78,12 @@ static void compute_next_hop(int dest, uint64_t* hops, struct PolicyInput *polic
 			if (as == dest) {
 				continue;
 			}
-			uint64_t chosen;
+			uint64_t chosen = 0;
 			int success = 0;
 			for (int possible = 0; possible < participants; possible++) {
 				uint64_t next_hop_check = policies[as].ordering[possible];
 				if (available[next_hop_check] && // Has a path
-					get_export_policy((policies + next_hop_check), hops[next_hop_check], as) &&
-					!success) {
+					get_export_policy((policies + next_hop_check), hops[next_hop_check], as)) {
 					// Found a path 
 					chosen = next_hop_check;
 					if (hops[as] != chosen) {
@@ -142,9 +141,7 @@ int main(int argc, char **argv) {
     	printf("%d ", get_export_policy((inputs + 12), 12, i));
 	}
 	printf("\n");
-    compute_next_hop(0, hops, inputs, size);
-    printf("==== NEXTHOPS ====\n");
-    for (int i = 0; i < size; i++) {
-    	printf("%d -> 0  %lu\n", i, hops[i]);
-	}
+    compute_next_hop(12, hops, inputs, size);
+	for (int i = 0; i < size; i++)
+		printf("%d %lu\n", i, hops[i]);
 }
