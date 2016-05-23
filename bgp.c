@@ -83,7 +83,8 @@ static void compute_next_hop(int dest, uint64_t* hops, struct PolicyInput *polic
 			for (int possible = 0; possible < participants; possible++) {
 				uint64_t next_hop_check = policies[as].ordering[possible];
 				if (available[next_hop_check] && // Has a path
-					get_export_policy((policies + next_hop_check), hops[next_hop_check], as)) {
+					get_export_policy((policies + next_hop_check), hops[next_hop_check], as) &&
+					!success) {
 					// Found a path 
 					chosen = next_hop_check;
 					if (hops[as] != chosen) {
